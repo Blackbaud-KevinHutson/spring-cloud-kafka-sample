@@ -1,2 +1,2 @@
 
-Test for Spring Clound and Kafka
+Test for Spring Cloud and Kafka

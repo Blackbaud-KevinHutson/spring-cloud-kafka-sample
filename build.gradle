@@ -1,0 +1,68 @@
+/**
+ * This defines the build script meta data for the project itself. The repositories and
+ * dependencies defined are used when running the build script only.
+ */
+buildscript {
+    ext {
+        springBootVersion = '1.2.3.RELEASE'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "com.blackbaud:gradle-internal:2+"
+        classpath "com.blackbaud:gradle-docker:1.2+"
+        classpath 'net.jokubasdargis.buildtimer:gradle-plugin:0.1.1'
+    }
+}
+
+apply plugin: "blackbaud-internal"
+apply plugin: 'spring-boot'
+
+configurations {
+    client
+    clientGen
+    mainTest
+    doclet {
+        extendsFrom compile
+    }
+    clientTemplatesZip
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+
+repositories {
+    maven {
+        url 'http://repo.spring.io/milestone'
+    }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+
+    compile 'org.projectlombok:lombok:1.16.4'
+
+    // Utilities
+    compile('net.sf.dozer:dozer:5.5.1') {
+   	    exclude group: 'org.slf4j'
+   	}
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile ('org.springframework.cloud:spring-cloud-stream:1.0.0.M2') {
+        exclude group: 'org.slf4j'
+    }
+
+    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka:1.0.0.M2') {
+        exclude group: 'org.slf4j'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
